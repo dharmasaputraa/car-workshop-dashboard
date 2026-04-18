@@ -8,6 +8,12 @@ import {
   ThemedSider,
   useNotificationProvider,
 } from "@refinedev/antd";
+import {
+  CarOutlined,
+  CarTwoTone,
+  SettingOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import "@refinedev/antd/dist/reset.css";
 
 import routerProvider, {
@@ -26,15 +32,17 @@ import {
   BlogPostList,
   BlogPostShow,
 } from "./pages/blog-posts";
+import { CarCreate, CarEdit, CarList, CarShow } from "./pages/cars";
 import {
-  CategoryCreate,
-  CategoryEdit,
-  CategoryList,
-  CategoryShow,
-} from "./pages/categories";
+  ServiceCreate,
+  ServiceEdit,
+  ServiceList,
+  ServiceShow,
+} from "./pages/services";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
+import { accessControlProvider } from "./providers/accessControl";
 import { authProvider } from "./providers/auth";
 import { dataProvider } from "./providers/data";
 
@@ -50,29 +58,95 @@ function App() {
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerProvider}
                 authProvider={authProvider}
+                accessControlProvider={accessControlProvider}
                 resources={[
                   {
-                    name: "blog_posts",
-                    list: "/blog-posts",
-                    create: "/blog-posts/create",
-                    edit: "/blog-posts/edit/:id",
-                    show: "/blog-posts/show/:id",
+                    name: "cars",
+                    list: "/cars",
+                    create: "/cars/create",
+                    edit: "/cars/edit/:id",
+                    show: "/cars/show/:id",
                     meta: {
                       canDelete: true,
+                      label: "Cars",
+                      include: "owner",
+                      icon: <CarOutlined />,
                     },
                   },
                   {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
+                    name: "services",
+                    list: "/services",
+                    create: "/services/create",
+                    edit: "/services/edit/:id",
+                    show: "/services/show/:id",
                     meta: {
                       canDelete: true,
+                      label: "Services",
+                      icon: <SettingOutlined />,
+                    },
+                  },
+                  // {
+                  //   name: "work_orders",
+                  //   list: "/work-orders",
+                  //   create: "/work-orders/create",
+                  //   edit: "/work-orders/edit/:id",
+                  //   show: "/work-orders/show/:id",
+                  //   meta: {
+                  //     canDelete: true,
+                  //     label: "Work Orders",
+                  //   },
+                  // },
+                  // {
+                  //   name: "mechanic_assignments",
+                  //   list: "/mechanic-assignments",
+                  //   create: "/mechanic-assignments/create",
+                  //   edit: "/mechanic-assignments/edit/:id",
+                  //   show: "/mechanic-assignments/show/:id",
+                  //   meta: {
+                  //     canDelete: true,
+                  //     label: "Mechanic Assignments",
+                  //   },
+                  // },
+                  // {
+                  //   name: "complaints",
+                  //   list: "/complaints",
+                  //   create: "/complaints/create",
+                  //   edit: "/complaints/edit/:id",
+                  //   show: "/complaints/show/:id",
+                  //   meta: {
+                  //     canDelete: true,
+                  //     label: "Complaints",
+                  //   },
+                  // },
+                  // {
+                  //   name: "invoices",
+                  //   list: "/invoices",
+                  //   create: "/invoices/create",
+                  //   edit: "/invoices/edit/:id",
+                  //   show: "/invoices/show/:id",
+                  //   meta: {
+                  //     canDelete: true,
+                  //     label: "Invoices",
+                  //   },
+                  // },
+                  {
+                    name: "users",
+                    list: "/users",
+                    create: "/users/create",
+                    edit: "/users/edit/:id",
+                    show: "/users/show/:id",
+                    meta: {
+                      canDelete: true,
+                      label: "Users",
+                      icon: <UserOutlined />,
                     },
                   },
                 ]}
                 options={{
+                  title: {
+                    text: "Car Workshop",
+                    icon: <CarTwoTone />,
+                  },
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   projectId: "ZmWf4d-l86Ce8-FiLNSJ",
@@ -96,20 +170,50 @@ function App() {
                   >
                     <Route
                       index
-                      element={<NavigateToResource resource="blog_posts" />}
+                      element={<NavigateToResource resource="work_orders" />}
                     />
-                    <Route path="/blog-posts">
+                    <Route path="/cars">
+                      <Route index element={<CarList />} />
+                      <Route path="create" element={<CarCreate />} />
+                      <Route path="edit/:id" element={<CarEdit />} />
+                      <Route path="show/:id" element={<CarShow />} />
+                    </Route>
+                    <Route path="/services">
+                      <Route index element={<ServiceList />} />
+                      <Route path="create" element={<ServiceCreate />} />
+                      <Route path="edit/:id" element={<ServiceEdit />} />
+                      <Route path="show/:id" element={<ServiceShow />} />
+                    </Route>
+                    <Route path="/work-orders">
                       <Route index element={<BlogPostList />} />
                       <Route path="create" element={<BlogPostCreate />} />
                       <Route path="edit/:id" element={<BlogPostEdit />} />
                       <Route path="show/:id" element={<BlogPostShow />} />
                     </Route>
-                    <Route path="/categories">
+                    <Route path="/mechanic-assignments">
+                      <Route index element={<BlogPostList />} />
+                      <Route path="create" element={<BlogPostCreate />} />
+                      <Route path="edit/:id" element={<BlogPostEdit />} />
+                      <Route path="show/:id" element={<BlogPostShow />} />
+                    </Route>
+                    <Route path="/complaints">
+                      <Route index element={<BlogPostList />} />
+                      <Route path="create" element={<BlogPostCreate />} />
+                      <Route path="edit/:id" element={<BlogPostEdit />} />
+                      <Route path="show/:id" element={<BlogPostShow />} />
+                    </Route>
+                    <Route path="/invoices">
+                      <Route index element={<BlogPostList />} />
+                      <Route path="create" element={<BlogPostCreate />} />
+                      <Route path="edit/:id" element={<BlogPostEdit />} />
+                      <Route path="show/:id" element={<BlogPostShow />} />
+                    </Route>
+                    {/* <Route path="/users">
                       <Route index element={<CategoryList />} />
                       <Route path="create" element={<CategoryCreate />} />
                       <Route path="edit/:id" element={<CategoryEdit />} />
                       <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
+                    </Route> */}
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route

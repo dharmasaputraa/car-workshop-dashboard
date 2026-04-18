@@ -15,9 +15,11 @@ const { Text } = Typography;
 const { useToken } = theme;
 
 type IUser = {
-  id: number;
+  id: string;
   name: string;
-  avatar: string;
+  email: string;
+  avatar_url: string;
+  role: string;
 };
 
 export const Header: React.FC<RefineThemedLayoutHeaderProps> = ({
@@ -53,7 +55,9 @@ export const Header: React.FC<RefineThemedLayoutHeaderProps> = ({
         />
         <Space style={{ marginLeft: "8px" }} size="middle">
           {user?.name && <Text strong>{user.name}</Text>}
-          {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
+          {user?.avatar_url && (
+            <Avatar src={user?.avatar_url} alt={user?.name} />
+          )}
         </Space>
       </Space>
     </AntdLayout.Header>
