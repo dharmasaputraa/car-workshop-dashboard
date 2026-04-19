@@ -1,4 +1,4 @@
-import { DateField, DeleteButton, EditButton, Show } from "@refinedev/antd";
+import { DateField, DeleteButton, EditButton, ListButton, RefreshButton, Show } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
 import { Badge, Descriptions, Space } from "antd";
 
@@ -13,12 +13,14 @@ export const ServiceShow = () => {
       isLoading={isLoading}
       headerButtons={
         <Space>
+          <ListButton />
           <EditButton recordItemId={record?.id} />
           <DeleteButton recordItemId={record?.id} />
+          <RefreshButton recordItemId={record?.id} />
         </Space>
       }
     >
-      <Descriptions bordered column={2}>
+      <Descriptions bordered column={1}>
         <Descriptions.Item label="ID">{record?.id}</Descriptions.Item>
         <Descriptions.Item label="Name">{record?.name}</Descriptions.Item>
         <Descriptions.Item label="Description" span={2}>
@@ -36,10 +38,10 @@ export const ServiceShow = () => {
           />
         </Descriptions.Item>
         <Descriptions.Item label="Created At">
-          <DateField value={record?.created_at} />
+          <DateField value={record?.created_at} format="DD/MM/YYYY HH:mm:ss" />
         </Descriptions.Item>
         <Descriptions.Item label="Updated At">
-          <DateField value={record?.updated_at} />
+          <DateField value={record?.updated_at} format="DD/MM/YYYY HH:mm:ss" />
         </Descriptions.Item>
       </Descriptions>
     </Show>

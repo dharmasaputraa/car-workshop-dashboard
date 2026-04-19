@@ -1,8 +1,7 @@
-import { DateField, Show, TextField } from "@refinedev/antd";
+import { DateField, DeleteButton, EditButton, ListButton, RefreshButton, Show } from "@refinedev/antd";
 import { useShow } from "@refinedev/core";
-import { Typography } from "antd";
+import {  Descriptions, Space } from "antd";
 
-const { Title } = Typography;
 
 export const CarShow = () => {
   const {
@@ -15,27 +14,31 @@ export const CarShow = () => {
   });
 
   return (
-    <Show isLoading={isLoading}>
-      <Title level={5}>{"ID"}</Title>
-      <TextField value={record?.id} />
-      <Title level={5}>{"Plate Number"}</Title>
-      <TextField value={record?.plate_number} />
-      <Title level={5}>{"Brand"}</Title>
-      <TextField value={record?.brand} />
-      <Title level={5}>{"Model"}</Title>
-      <TextField value={record?.model} />
-      <Title level={5}>{"Year"}</Title>
-      <TextField value={record?.year} />
-      <Title level={5}>{"Color"}</Title>
-      <TextField value={record?.color} />
-      <Title level={5}>{"Owner"}</Title>
-      <TextField value={record?.owner?.name} />
-      <Title level={5}>{"Owner Email"}</Title>
-      <TextField value={record?.owner?.email} />
-      <Title level={5}>{"Created At"}</Title>
-      {record?.created_at && <DateField value={record?.created_at} />}
-      <Title level={5}>{"Updated At"}</Title>
-      {record?.updated_at && <DateField value={record?.updated_at} />}
+    <Show isLoading={isLoading}
+     headerButtons={
+        <Space>
+          <ListButton />
+          <EditButton recordItemId={record?.id} />
+          <DeleteButton recordItemId={record?.id} />
+          <RefreshButton recordItemId={record?.id} />
+        </Space>
+      }>
+        <Descriptions bordered column={1}>
+        <Descriptions.Item label="ID">{record?.id}</Descriptions.Item>
+        <Descriptions.Item label="Plate Number">{record?.plate_number}</Descriptions.Item>
+        <Descriptions.Item label="Brand">{record?.brand}</Descriptions.Item>
+        <Descriptions.Item label="Model">{record?.model}</Descriptions.Item>
+        <Descriptions.Item label="Year">{record?.year}</Descriptions.Item>
+        <Descriptions.Item label="Color">{record?.color}</Descriptions.Item>
+        <Descriptions.Item label="Owner">{record?.owner?.name}</Descriptions.Item>
+        <Descriptions.Item label="Owner Email">{record?.owner?.email}</Descriptions.Item>
+        <Descriptions.Item label="Created At">
+          <DateField value={record?.created_at} format="DD/MM/YYYY HH:mm:ss" />
+        </Descriptions.Item>
+        <Descriptions.Item label="Updated At">
+          <DateField value={record?.updated_at} format="DD/MM/YYYY HH:mm:ss" />
+        </Descriptions.Item>
+      </Descriptions>
     </Show>
   );
 };

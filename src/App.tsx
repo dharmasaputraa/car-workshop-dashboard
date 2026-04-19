@@ -9,9 +9,8 @@ import {
   useNotificationProvider,
 } from "@refinedev/antd";
 import {
+  AuditOutlined,
   CarOutlined,
-  CarTwoTone,
-  SettingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import "@refinedev/antd/dist/reset.css";
@@ -25,6 +24,7 @@ import routerProvider, {
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { Header } from "./components/header";
+import { CustomTitle } from "./components/title";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import {
   BlogPostCreate,
@@ -82,7 +82,7 @@ function App() {
                     meta: {
                       canDelete: true,
                       label: "Services",
-                      icon: <SettingOutlined />,
+                      icon: <AuditOutlined />,
                     },
                   },
                   // {
@@ -143,10 +143,6 @@ function App() {
                   },
                 ]}
                 options={{
-                  title: {
-                    text: "Car Workshop",
-                    icon: <CarTwoTone />,
-                  },
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   projectId: "ZmWf4d-l86Ce8-FiLNSJ",
@@ -161,6 +157,7 @@ function App() {
                       >
                         <ThemedLayout
                           Header={Header}
+                          Title={CustomTitle}
                           Sider={(props) => <ThemedSider {...props} fixed />}
                         >
                           <Outlet />

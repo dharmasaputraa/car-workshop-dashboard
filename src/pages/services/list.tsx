@@ -95,7 +95,7 @@ export const ServiceList = () => {
           dataIndex="created_at"
           title={"Created At"}
           render={(value: string) =>
-            value ? <DateField value={value} /> : "-"
+            value ? <DateField value={value} format="DD/MM/YYYY HH:mm:ss" /> : "-"
           }
         />
         <Table.Column

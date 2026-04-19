@@ -144,4 +144,95 @@ export const authProvider: AuthProvider = {
     console.error(error);
     return { error };
   },
+
+  register: async ({ name, email, password, password_confirmation }) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/register`, {
+        name,
+        email,
+        password,
+        password_confirmation,
+      });
+
+      const { data, meta } = response.data;
+
+      // Store the access token
+      localStorage.setItem(TOKEN_KEY, meta.token.access_token);
+
+      // Store user identity
+      const userIdentity = {
+        id: data.id,
+        name: data.attributes.name,
+        email: data.attributes.email,
+        avatar_url: data.attributes.avatar_url,
+        role: data.attributes.role,
+        is_active: data.attributes.is_active,
+      };
+      localStorage.setItem(USER_KEY, JSON.stringify(userIdentity));
+
+      // Store permissions
+      localStorage.setItem(
+        PERMISSIONS_KEY,
+        JSON.stringify(data.attributes.permissions || []),
+      );
+
+      // Store super admin flag
+      localStorage.setItem(
+        IS_SUPER_ADMIN_KEY,
+        String(data.meta?.is_super_admin || false),
+      );
+
+      return {
+        success: true,
+        redirectTo: "/",
+      };
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError?.response?.data?.message || "Registration failed";
+      return {
+        success: false,
+        error: {
+          name: "RegistrationError",
+          message,
+        },
+      };
+    }
+  },
+
+  forgotPassword: async ({ email }) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/forgot-password`, {
+        email,
+      });
+
+      const message =
+        response.data.meta?.message ||
+        "Password reset link has been sent to your email.";
+
+      return {
+        success: true,
+        successNotification: {
+          message: "Success",
+          description: message,
+        },
+      };
+    } catch (error: unknown) {
+      const axiosError = error as {
+        response?: { data?: { message?: string } };
+      };
+      const message =
+        axiosError?.response?.data?.message ||
+        "Failed to send password reset email";
+      return {
+        success: false,
+        error: {
+          name: "ForgotPasswordError",
+          message,
+        },
+      };
+    }
+  },
 };
