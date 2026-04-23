@@ -6,7 +6,8 @@ import {
   ShowButton,
   useTable,
 } from "@refinedev/antd";
-import { type BaseRecord } from "@refinedev/core";
+import { type BaseRecord, useCan } from "@refinedev/core";
+import { UserSwitchOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Badge,
@@ -18,10 +19,16 @@ import {
   Table,
   Tag,
 } from "antd";
+import { useNavigate } from "react-router";
 import { getRoleColor, getRoleLabel } from "../../enums/roleType";
 import { ToggleActiveButton } from "../../components/buttons";
 
 export const UserList = () => {
+  const navigate = useNavigate();
+  const { data: canChangeRole } = useCan({
+    resource: "users",
+    action: "change_role",
+  });
   const [form] = Form.useForm();
   const { tableProps, setFilters } = useTable({
     syncWithLocation: true,
@@ -155,6 +162,15 @@ export const UserList = () => {
                 hideText
                 size="small"
               />
+              {canChangeRole?.can && (
+                <Button
+                  size="small"
+                  icon={<UserSwitchOutlined />}
+                  onClick={() =>
+                    navigate(`/users/change-role/${record.id}`)
+                  }
+                />
+              )}
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />

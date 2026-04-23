@@ -1,6 +1,14 @@
+import React from "react";
 import { Typography } from "antd";
 
+const appTitle = import.meta.env.VITE_APP_TITLE || "Car Workshop";
+
 export const CustomTitle = ({ collapsed = false }: { collapsed?: boolean }) => {
+  const shortTitle = appTitle
+    .split(" ")
+    .map((w: string) => w[0])
+    .join("");
+
   return (
     <Typography.Title
       level={1}
@@ -13,7 +21,7 @@ export const CustomTitle = ({ collapsed = false }: { collapsed?: boolean }) => {
         textOverflow: "ellipsis",
       }}
     >
-      {collapsed ? "CW" : "Car Workshop"}
+      {collapsed ? shortTitle : appTitle}
     </Typography.Title>
   );
 };

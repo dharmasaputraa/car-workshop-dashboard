@@ -1,8 +1,10 @@
 import type { RefineThemedLayoutHeaderProps } from "@refinedev/antd";
-import { useGetIdentity } from "@refinedev/core";
+import { useGetIdentity, useLogout } from "@refinedev/core";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Layout as AntdLayout,
   Avatar,
+  Dropdown,
   Space,
   Switch,
   theme,
@@ -28,6 +30,7 @@ export const Header: React.FC<RefineThemedLayoutHeaderProps> = ({
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
+  const { mutate: logout } = useLogout();
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
@@ -53,12 +56,30 @@ export const Header: React.FC<RefineThemedLayoutHeaderProps> = ({
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
         />
-        <Space style={{ marginLeft: "8px" }} size="middle">
-          {user?.name && <Text strong>{user.name}</Text>}
-          {user?.avatar_url && (
-            <Avatar src={user?.avatar_url} alt={user?.name} />
-          )}
-        </Space>
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "logout",
+                icon: <LogoutOutlined />,
+                label: "Logout",
+                danger: true,
+                style: { minWidth: 150 },
+                onClick: () => logout(),
+              },
+            ],
+          }}
+          trigger={["click"]}
+        >
+          <Space style={{ marginLeft: "8px", cursor: "pointer" }} size="middle">
+            {user?.name && <Text strong>{user.name}</Text>}
+            {user?.avatar_url ? (
+              <Avatar src={user?.avatar_url} alt={user?.name} />
+            ) : (
+              <Avatar icon={<UserOutlined />} />
+            )}
+          </Space>
+        </Dropdown>
       </Space>
     </AntdLayout.Header>
   );

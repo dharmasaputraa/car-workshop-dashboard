@@ -1,15 +1,17 @@
 import { Edit } from "@refinedev/antd";
 import { useOne } from "@refinedev/core";
-import { Form, Select, Button, message } from "antd";
+import { Form, Select, Button, App } from "antd";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { axiosInstance } from "../../providers/data";
 import { ROLE_OPTIONS } from "../../enums/roleType";
 
 export const UserChangeRole = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const { message: messageApi } = App.useApp();
 
   const { query } = useOne({
     resource: "users",
@@ -34,9 +36,10 @@ export const UserChangeRole = () => {
       await axiosInstance.patch(`/users/${id}/role?include=roles`, {
         role: values.role,
       });
-      message.success("Role changed successfully");
+      messageApi.success("Role changed successfully");
+      navigate("/users");
     } catch (error) {
-      message.error("Failed to change role");
+      messageApi.error("Failed to change role");
       console.error(error);
     } finally {
       setLoading(false);
@@ -47,7 +50,15 @@ export const UserChangeRole = () => {
     <Edit
       title="Change User Role"
       canDelete={false}
-      saveButtonProps={{ style: { display: "none" } }}
+      footerButtons={() => (
+        <Button
+          type="primary"
+          onClick={() => form.submit()}
+          loading={loading}
+        >
+          Change Role
+        </Button>
+      )}
     >
       <Form
         form={form}
@@ -68,11 +79,6 @@ export const UserChangeRole = () => {
             }))}
             loading={isLoading}
           />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Change Role
-          </Button>
         </Form.Item>
       </Form>
     </Edit>
