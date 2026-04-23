@@ -8,11 +8,7 @@ import {
   ThemedSider,
   useNotificationProvider,
 } from "@refinedev/antd";
-import {
-  AuditOutlined,
-  CarOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { AuditOutlined, CarOutlined, UserOutlined } from "@ant-design/icons";
 import "@refinedev/antd/dist/reset.css";
 
 import routerProvider, {
@@ -26,12 +22,6 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { Header } from "./components/header";
 import { CustomTitle } from "./components/title";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "./pages/blog-posts";
 import { CarCreate, CarEdit, CarList, CarShow } from "./pages/cars";
 import {
   ServiceCreate,
@@ -42,7 +32,13 @@ import {
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-import { UserCreate, UserEdit, UserList, UserShow } from "./pages/users";
+import {
+  UserCreate,
+  UserEdit,
+  UserList,
+  UserShow,
+  UserChangeRole,
+} from "./pages/users";
 import { accessControlProvider } from "./providers/accessControl";
 import { authProvider } from "./providers/auth";
 import { dataProvider } from "./providers/data";
@@ -182,7 +178,7 @@ function App() {
                       <Route path="edit/:id" element={<ServiceEdit />} />
                       <Route path="show/:id" element={<ServiceShow />} />
                     </Route>
-                    <Route path="/work-orders">
+                    {/* <Route path="/work-orders">
                       <Route index element={<BlogPostList />} />
                       <Route path="create" element={<BlogPostCreate />} />
                       <Route path="edit/:id" element={<BlogPostEdit />} />
@@ -205,12 +201,16 @@ function App() {
                       <Route path="create" element={<BlogPostCreate />} />
                       <Route path="edit/:id" element={<BlogPostEdit />} />
                       <Route path="show/:id" element={<BlogPostShow />} />
-                    </Route>
+                    </Route> */}
                     <Route path="/users">
                       <Route index element={<UserList />} />
                       <Route path="create" element={<UserCreate />} />
                       <Route path="edit/:id" element={<UserEdit />} />
                       <Route path="show/:id" element={<UserShow />} />
+                      <Route
+                        path="change-role/:id"
+                        element={<UserChangeRole />}
+                      />
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>

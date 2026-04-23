@@ -1,32 +1,23 @@
 import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Select } from "antd";
-import { ROLE_OPTIONS } from "../../enums/roleType";
+import { Form, Input } from "antd";
 
 export const UserEdit = () => {
-  const { formProps, saveButtonProps, query } = useForm({
+  const { formProps, saveButtonProps } = useForm({
     meta: {
       include: "roles",
     },
   });
-
-  const record = query?.data?.data as
-    | Record<string, unknown>
-    | undefined;
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Form
         {...formProps}
         layout="vertical"
-        initialValues={{
-          ...formProps.initialValues,
-          role: (record?.roles as Array<{ name: string }>)?.[0]?.name,
-        }}
+        initialValues={formProps.initialValues}
         onFinish={(values: Record<string, unknown>) => {
           const payload: Record<string, unknown> = {
             name: values.name,
             email: values.email,
-            role: values.role,
           };
 
           // Only send password if user provided a new one
@@ -91,19 +82,6 @@ export const UserEdit = () => {
           ]}
         >
           <Input.Password placeholder="Leave blank to keep current" />
-        </Form.Item>
-        <Form.Item
-          name="role"
-          label="Role"
-          rules={[{ required: true, message: "Role is required" }]}
-        >
-          <Select
-            placeholder="Select role"
-            options={ROLE_OPTIONS.map((r) => ({
-              label: r.label,
-              value: r.value,
-            }))}
-          />
         </Form.Item>
       </Form>
     </Edit>
