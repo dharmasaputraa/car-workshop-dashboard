@@ -1,7 +1,7 @@
 import { Edit } from "@refinedev/antd";
 import { useOne } from "@refinedev/core";
 import { Form, Select, Button, App } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { axiosInstance } from "../../providers/data";
 import { ROLE_OPTIONS } from "../../enums/roleType";
@@ -27,6 +27,12 @@ export const UserChangeRole = () => {
   const record = query?.data?.data as Record<string, unknown> | undefined;
   const isLoading = query?.isLoading || false;
   const currentRole = (record?.roles as Array<{ name: string }>)?.[0]?.name;
+
+  useEffect(() => {
+    if (currentRole) {
+      form.setFieldValue("role", currentRole);
+    }
+  }, [currentRole, form]);
 
   const handleSubmit = async (values: { role: string }) => {
     if (!id) return;
